@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const random_name = require('node-random-name');
 
 const app = express();
 
@@ -12,10 +13,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const name = random_name();
 let counter = 0;
 
+
 app.use('/', (req, res) => {
-  res.json({'hello': 'world', visitor: counter++})
+  res.json({name, visitor: counter++})
 });
 
 // catch 404 and forward to error handler
