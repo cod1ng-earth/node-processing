@@ -13,13 +13,26 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const name = random_name();
+const processName = random_name();
 let counter = 0;
+const messages = []
 
-
-app.use('/', (req, res) => {
-  res.json({name, visitor: counter++})
+app.get('/', (req, res) => {
+  res.json({
+    name: processName, 
+    visitor: counter++, 
+    messages
+  })
 });
+
+app.post('/', (req, res) => {
+    const msg = req.body
+    messages.push(msg.snack)
+    res.json({
+      name: processName,
+      msg_count: messages.length, 
+      received: msg});
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
