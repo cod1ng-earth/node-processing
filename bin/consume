@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+require('dotenv').config()
+
+const kafka = require('../lib/kafka');
+
+const prefix = process.env.CLOUDKARAFKA_TOPIC_PREFIX;
+
+const topic = `${prefix}test`;
+
+const consumer = kafka.consumer({ groupId: 'test-group' })
+
+const run = async() => {
+    await consumer.subscribe({ topic, fromBeginning: true })
+    await consumer.run({
+        eachMessage: async ({ topic, partition, message }) => {
+            console.log({
+                //key: message.key ? message.key.toString() : null,
+                value: message.value.toString(),
+                headers: message.headers,
+            })
+        },
+    })    
+}
+
+run();
