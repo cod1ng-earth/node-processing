@@ -1,3 +1,4 @@
+require('dotenv').config()
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -14,10 +15,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const processName = random_name();
-let counter = 0;
-const messages = []
 
-app.get('/', (req, res) => {
+const catalog = require('./handlers/catalog');
+catalog.startup();
+
+app.get('/', catalog.handler);
+
+app.get('/mem', (req, res) => {
   res.json({
     name: processName, 
     visitor: counter++, 

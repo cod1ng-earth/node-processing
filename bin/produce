@@ -9,12 +9,13 @@ const topic = `${prefix}test`;
 const producer = kafka.producer()
 
 const run = async() => {
+    const dt = new Date()
     await producer.connect()
     const res = await producer.send({
       topic,
       //compression: CompressionTypes.GZIP,
       messages: [
-          {value: '42'}
+          {value: dt.toISOString()}
       ]
     });
     console.log(res)

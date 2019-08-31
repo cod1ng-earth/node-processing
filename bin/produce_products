@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+require('dotenv').config()
+const {kafka,prefix} = require('../lib/kafka');
+const Faker = require('faker')
+const topic = `${prefix}UpsertProduct`;
+
+const COUNT = 1000;
+
+Faker.seed(123)
+
+function fakeProducts(count, handler) {
+  for (let i = count; i--> 0; ) {
+    const price = Faker.commerce.price(0,1000,2);
+    const product = {
+      sku: Faker.random.alphaNumeric(20),
+      title: Faker.commerce.productName(),
+      description: Faker.lorem.paragraph(1),
+      category: Faker.commerce.department(),
+      availability: {
+        hidden: Faker.random.boolean(),
+        itemCount: Faker.random.number(2000)
+      },
+      pricing: {
+        regular: price,
+        volume: {
+          10: price - (price / 10),
+          100: price - (price / 5),
+        }
+      }
+    }
+    handler(product)
+  }
+}
+
+const producer = kafka.producer()
+
+async function kafkaHandler(product) {
+  await producer.connect()
+  const _product = JSON.stringify(product)
+  const res = producer.send({
+    topic,
+    //compression: CompressionTypes.GZIP,
+    messages: [
+        {key: product.sku, value: _product}
+    ]
+  });
+}
+
+function modifier(step) {
+  return function(product) {
+
+  }
+}
+
+const run = async() => {   
+    
+    await fakeProducts(COUNT, kafkaHandler)
+    
+    //await producer.disconnect()
+}
+
+run();
