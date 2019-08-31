@@ -1,11 +1,13 @@
 const {kafka, prefix} = require('../lib/kafka');
 
-const topic = `${prefix}UpsertProduct`;
-const consumer = kafka.consumer({groupId: 'catalog'})
+const topic = `${prefix}UpsertProduct2`;
 const products = {};
 
-const startup = async () => {
-  
+let _processName = "";
+
+const startup = async (processName) => {
+    _processName = processName
+    const consumer = kafka.consumer({groupId: processName})
     await consumer.subscribe({ topic, fromBeginning: true })    
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
@@ -20,7 +22,7 @@ module.exports = {
   startup,
   handler: (req, res) => {
     res.json({
-      "foo": "bar",
+      "foo": _processName,
       "test": Object.values(products).length,
       products
     })

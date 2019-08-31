@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 require('dotenv').config()
 
-const [kafka, prefix] = require('../lib/kafka');
+const {kafka, prefix} = require('../lib/kafka');
 
 const topic = `${prefix}UpsertProduct`;
 

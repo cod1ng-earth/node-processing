@@ -12,7 +12,7 @@ services:
     environment:
       HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
       #KAFKA_ADVERTISED_HOST_NAME: 172.19.0.1
-      KAFKA_CREATE_TOPICS: "UpsertProduct:1:1,Cart:1:1,Checkout:1:1"
+      KAFKA_CREATE_TOPICS: "UpsertProduct:1:1,UpsertProduct2:5:5,Cart:1:1,Checkout:1:1"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://_{HOSTNAME_COMMAND}:9092

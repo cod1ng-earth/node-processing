@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const processName = random_name();
 
 const catalog = require('./handlers/catalog');
-catalog.startup();
+catalog.startup(processName);
 
 app.get('/', catalog.handler);
 

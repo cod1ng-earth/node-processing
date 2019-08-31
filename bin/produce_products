@@ -2,7 +2,7 @@
 require('dotenv').config()
 const {kafka,prefix} = require('../lib/kafka');
 const Faker = require('faker')
-const topic = `${prefix}UpsertProduct`;
+const topic = `${prefix}UpsertProduct2`;
 
 const COUNT = 1000;
 
@@ -41,7 +41,7 @@ async function kafkaHandler(product) {
     topic,
     //compression: CompressionTypes.GZIP,
     messages: [
-        {key: product.sku, value: _product}
+        {value: _product}
     ]
   });
 }
